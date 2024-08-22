@@ -8,6 +8,7 @@ Tämä projekti on React-sovellus, joka esittelee kurssien tietoja ja laskee teh
 
 Projektin tiedostorakenne on seuraava:
 
+```mermaid
 graph TD
   A[Projektin kansio: AYO-FULLSTACKCOURSE1-5/tehtavat_2.1-2.20/2.2] --> B[src]
   B --> C[App.jsx]
