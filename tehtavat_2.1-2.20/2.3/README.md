@@ -9,7 +9,7 @@ Tämä projekti on React-sovellus, joka esittelee kurssien tietoja ja laskee teh
 Projektin tiedostorakenne on seuraava:
 
 graph TD
-  A[Projektin kansio] --> B[src]
+  A[Projektin kansio: AYO-FULLSTACKCOURSE1-5/tehtavat_2.1-2.20/2.2] --> B[src]
   B --> C[App.jsx]
   B --> D[Course.jsx]
   B --> E[Content.jsx]
@@ -19,6 +19,3 @@ graph TD
   B --> I[main.jsx]
 
   D[Course.jsx] --> J[reduce-metodi]
-  J --> K[course.parts]
-  J --> L[sum + part.exercises]
-  J --> M[0]
