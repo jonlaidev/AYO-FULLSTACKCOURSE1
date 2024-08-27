@@ -33,10 +33,22 @@ const App = () => {
   const handleAddPerson = (event) => {
     event.preventDefault();
 
-    const nameExists = persons.some(person => person.name === newName);
+    const personExists = persons.find(person => person.name === newName);
 
-    if (nameExists) {
-      alert(`${newName} on jo puhelinluettelossa`);
+    if (personExists) {
+      if (window.confirm(`${newName} on jo puhelinluettelossa. Haluatko päivittää numeron?`)) {
+        const updatedPerson = { ...personExists, number: newNumber };
+        personsService
+          .update(personExists.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson));
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch(error => {
+            console.error('Virhe henkilön päivittämisessä:', error);
+          });
+      }
     } else {
       const newPerson = { name: newName, number: newNumber };
 
@@ -49,21 +61,6 @@ const App = () => {
         })
         .catch(error => {
           console.error('Virhe henkilön lisäämisessä:', error);
-        });
-    }
-  };
-
-  const handleDelete = (id) => {
-    /* if (window.confirm("Haluatko varmasti poistaa tämän henkilön?")) */ {
-      personsService
-        .remove(id)
-        .then(response => {
-          setPersons(persons.filter(person => person.id !== id));
-        })
-        .catch(error => {
-          console.error('Virhe henkilön poistamisessa:', error);
-          alert('Henkilön poistaminen epäonnistui. Henkilö saattoi olla jo poistettu palvelimelta.');
-          setPersons(persons.filter(person => person.id !== id));
         });
     }
   };
@@ -99,7 +96,6 @@ const App = () => {
         {filteredPersons.map(person => (
           <li key={person.id}>
             {person.name}: {person.number}
-            <button onClick={() => handleDelete(person.id)}>Poista</button>
           </li>
         ))}
       </ul>

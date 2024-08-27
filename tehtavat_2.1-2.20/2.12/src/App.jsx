@@ -33,10 +33,21 @@ const App = () => {
   const handleAddPerson = (event) => {
     event.preventDefault();
 
-    const nameExists = persons.some(person => person.name === newName);
+    const existingPerson = persons.find(person => person.name === newName);
 
-    if (nameExists) {
-      alert(`${newName} on jo puhelinluettelossa`);
+    if (existingPerson) {
+      const updatedPerson = { ...existingPerson, number: newNumber };
+
+      axios
+        .put(`http://localhost:3001/persons/${existingPerson.id}`, updatedPerson)
+        .then(response => {
+          setPersons(persons.map(person => person.id !== existingPerson.id ? person : response.data));
+          setNewName('');
+          setNewNumber('');
+        })
+        .catch(error => {
+          console.error('Virhe numeron päivittämisessä:', error);
+        });
     } else {
       const newPerson = { name: newName, number: newNumber };
 
@@ -49,23 +60,6 @@ const App = () => {
         })
         .catch(error => {
           console.error('Virhe henkilön lisäämisessä:', error);
-        });
-    }
-  };
-
-  const handleDelete = (id) => {
-    /* confirm_alert:
-    if (window.confirm("Haluatko varmasti poistaa tämän henkilön?")) */ {
-      axios
-        .delete(`http://localhost:3001/persons/${id}`)
-        .then(response => {
-          setPersons(persons.filter(person => person.id !== id));
-        })
-        .catch(error => {
-          console.error('Virhe henkilön poistamisessa:', error);
-          /* deleted_alert:
-          alert('Henkilön poistaminen epäonnistui. Henkilö on jo poistettu palvelimelta.'); */
-          setPersons(persons.filter(person => person.id !== id));
         });
     }
   };
@@ -101,7 +95,6 @@ const App = () => {
         {filteredPersons.map(person => (
           <li key={person.id}>
             {person.name}: {person.number}
-            <button onClick={() => handleDelete(person.id)}>Poista</button>
           </li>
         ))}
       </ul>

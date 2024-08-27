@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import personsService from './services/persons';
+import Notification from './Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     personsService
@@ -14,7 +16,8 @@ const App = () => {
         setPersons(initialPersons);
       })
       .catch(error => {
-        console.error('Virhe tietojen hakemisessa:', error);
+        setNotification(`Virhe tietojen hakemisessa: ${error.message}`);
+        setTimeout(() => setNotification(null), 2000);
       });
   }, []);
 
@@ -33,10 +36,25 @@ const App = () => {
   const handleAddPerson = (event) => {
     event.preventDefault();
 
-    const nameExists = persons.some(person => person.name === newName);
+    const personExists = persons.find(person => person.name === newName);
 
-    if (nameExists) {
-      alert(`${newName} on jo puhelinluettelossa`);
+    if (personExists) {
+      if (window.confirm(`${newName} on jo puhelinluettelossa. Haluatko päivittää numeron?`)) {
+        const updatedPerson = { ...personExists, number: newNumber };
+        personsService
+          .update(personExists.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson));
+            setNotification(`Päivitettiin ${newName}`);
+            setTimeout(() => setNotification(null), 2000);
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch(error => {
+            setNotification(`Virhe henkilön päivittämisessä: ${error.message}`);
+            setTimeout(() => setNotification(null), 2000);
+          });
+      }
     } else {
       const newPerson = { name: newName, number: newNumber };
 
@@ -44,11 +62,14 @@ const App = () => {
         .create(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson));
+          setNotification(`Lisätty ${newName}`);
+          setTimeout(() => setNotification(null), 2000);
           setNewName('');
           setNewNumber('');
         })
         .catch(error => {
-          console.error('Virhe henkilön lisäämisessä:', error);
+          setNotification(`Virhe henkilön lisäämisessä: ${error.message}`);
+          setTimeout(() => setNotification(null), 2000);
         });
     }
   };
@@ -59,10 +80,12 @@ const App = () => {
         .remove(id)
         .then(response => {
           setPersons(persons.filter(person => person.id !== id));
+          setNotification(`Poistettu henkilö`);
+          setTimeout(() => setNotification(null), 2000);
         })
         .catch(error => {
-          console.error('Virhe henkilön poistamisessa:', error);
-          setPersons(persons.filter(person => person.id !== id));
+          setNotification(`Virhe henkilön poistamisessa: ${error.message}`);
+          setTimeout(() => setNotification(null), 2000);
         });
     }
   };
@@ -74,6 +97,8 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+
+      <Notification message={notification} />
 
       <div>
         <p>Hae:</p>

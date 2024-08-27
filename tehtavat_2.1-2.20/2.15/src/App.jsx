@@ -70,7 +70,7 @@ const App = () => {
         })
         .catch(error => {
           console.error('Virhe henkilön poistamisessa:', error);
-          alert('Henkilön poistaminen epäonnistui. Henkilö saattoi olla jo poistettu palvelimelta.');
+          alert('Henkilön poistaminen epäonnistui. Henkilö on jo poistettu palvelimelta.');
         });
     }
   };
