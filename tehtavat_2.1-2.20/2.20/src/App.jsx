@@ -49,7 +49,7 @@ const App = () => {
     console.log(`Näytetään maa: ${country.name.common}`); // log
     setSelectedCountry(country);
     setCountries([]);
-    fetchWeather(country.capital[0]); // Hakee säätiedot pääkaupungille
+    fetchWeather(country.capital[0]);
   };
 
   if (selectedCountry) {
