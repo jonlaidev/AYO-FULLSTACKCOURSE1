@@ -60,11 +60,11 @@ const App = () => {
   console.log('Näytetään hakutulokset'); //log
   return (
     <div>
-      <h1>Country Information</h1>
+      <h1>Maahaku</h1>
       <input value={newSearch} onChange={handleSearchChange} placeholder="Search for a country..." />
       <ul>
         {countries.length > 10 ? (
-          <p>Too many matches, specify another filter</p>
+          <p>Tarkenna hakuehtoa!</p>
         ) : countries.length > 1 ? (
           countries.map(country => (
             <li key={country.cca3}>
@@ -75,10 +75,10 @@ const App = () => {
         ) : countries.length === 1 ? (
           <div>
             <h2>{countries[0].name.common}</h2>
-            <p>Capital: {countries[0].capital}</p>
-            <p>Population: {countries[0].population}</p>
-            <p>Area: {countries[0].area} km²</p>
-            <h3>Languages</h3>
+            <p>Pääkaupunki: {countries[0].capital}</p>
+            <p>Väestö: {countries[0].population}</p>
+            <p>Pinta-ala: {countries[0].area} km²</p>
+            <h3>Kielet</h3>
             <ul>
               {Object.values(countries[0].languages).map(language => (
                 <li key={language}>{language}</li>

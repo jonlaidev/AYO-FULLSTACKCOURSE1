@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const api_key = import.meta.env.VITE_OPENWEATHER_API_KEY;
+const api_key = import.meta.env.VITE_WEATHER_API_KEY;
 console.log('API Key:', api_key); //log
 
 const getWeather = async (capital) => {
