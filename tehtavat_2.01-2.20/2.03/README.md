@@ -1,4 +1,4 @@
-# React Course Application
+# React Course Application.
 
 ## Projektin kuvaus
 
