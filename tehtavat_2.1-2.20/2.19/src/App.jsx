@@ -42,10 +42,10 @@ const App = () => {
     return (
       <div>
         <h2>{selectedCountry.name.common}</h2>
-        <p>Capital: {selectedCountry.capital}</p>
-        <p>Population: {selectedCountry.population}</p>
-        <p>Area: {selectedCountry.area} km²</p>
-        <h3>Languages</h3>
+        <p>Pääkaupunki: {selectedCountry.capital}</p>
+        <p>Väestö: {selectedCountry.population}</p>
+        <p>Pinta-ala: {selectedCountry.area} km²</p>
+        <h3>Kielet</h3>
         <ul>
           {Object.values(selectedCountry.languages).map(language => (
             <li key={language}>{language}</li>
